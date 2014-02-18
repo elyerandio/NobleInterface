@@ -1,0 +1,7 @@
+.idea/*
+build/*
+CVS/*
+dist/*
+dist.old/*
+*~
+*.pyc

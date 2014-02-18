@@ -1,0 +1,14 @@
+[NobleCurrentDSN]
+dsn: mnlcc-apps
+uid: root
+pwd: VuT9A5hA
+
+[NobleHistoryDSN]
+dsn: mnlcc-ras
+uid: root
+pwd: VuT9A5hA
+
+[OrisoftTMSDSN]
+dsn: Docomo_SQL_Server
+uid: tmsadm
+pwd: gawinmo
