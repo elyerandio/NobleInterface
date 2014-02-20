@@ -109,7 +109,7 @@ class NobleInterfaceForm(QDialog):
             i += 1
 
         self.workgroupComboTo.setCurrentIndex(i-1)
-        cur.execute("Select BADGE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where CATEGORY_CODE = 'CAGT' order by EMPLOYEE_NAME")
+        cur.execute("Select BADGE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where CATEGORY_CODE in ('CAGT','CC') order by EMPLOYEE_NAME")
         i = 0
         for rec in cur:
             self.employeeComboFrom.addItem(rec[1])
@@ -135,7 +135,7 @@ class NobleInterfaceForm(QDialog):
     def populateBadge(self):
         self.employeeComboFrom.clear()
         self.employeeComboTo.clear()
-        sqlStr = "Select BADGE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where CATEGORY_CODE = 'CAGT' and " \
+        sqlStr = "Select BADGE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where CATEGORY_CODE in ('CAGT','CC') and " \
                 "WORK_GROUP_CODE in " \
                 "(Select WORK_GROUP_CODE from WORK_GROUP where WORK_GROUP_CODE >= '%s' and WORK_GROUP_CODE <= '%s') order by EMPLOYEE_NAME" % \
                 (self.workgroupComboFrom.currentText(), self.workgroupComboTo.currentText())
