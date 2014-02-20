@@ -3,5 +3,10 @@ build/*
 CVS/*
 dist/*
 dist.old/*
+Docomo_Atomix\ Data/*
+Docomo_Atomix\ Data/Done/*
+NobleBrowser/build/*
+NobleBrowswer/dist/*
 *~
 *.pyc
+.gitignore
