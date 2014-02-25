@@ -48,8 +48,8 @@ class NobleInterfaceForm(QDialog):
         self.dateEditFrom.setMaximumDate(QDate.currentDate())
         self.dateEditTo = QDateTimeEdit(QDate.currentDate())
         self.dateEditTo.setCalendarPopup(True)
-        self.chOverwrite = QCheckBox('Overwrite existing record')
-        self.chOverwrite.setChecked(True)
+        #self.chOverwrite = QCheckBox('Overwrite existing record')
+        #self.chOverwrite.setChecked(True)
         self.labelStatus = QLabel('')
         #self.dateEditTo.setDateRange(self.dateEditFrom.date(), QDate.currentDate())
         #self.dateEditTo.setMinimumDate(self.dateEditFrom.date())
@@ -76,9 +76,9 @@ class NobleInterfaceForm(QDialog):
         layout.addWidget(self.dateEditFrom, 3, 1)
         layout.addWidget(self.dateEditTo, 3, 2)
         #layout.addWidget(QLabel(''), 5,0)
-        layout.addWidget(self.chOverwrite, 4, 1)
-        layout.addLayout(buttonLayout, 6, 1, 1, 2)
-        layout.addWidget(self.labelStatus, 7, 0, 1, 3)
+        #layout.addWidget(self.chOverwrite, 4, 1)
+        layout.addLayout(buttonLayout, 5, 1, 1, 2)
+        layout.addWidget(self.labelStatus, 6, 0, 1, 3)
         self.initGui()
 
         #self.connect(self.workgroupComboFrom, SIGNAL('currentIndexChanged(int)'), self.populateBadge)
@@ -256,10 +256,9 @@ class NobleInterfaceForm(QDialog):
 
             except pyodbc.IntegrityError, e:
                 # check the overwrite data checkbox
-                if self.chOverwrite.isChecked():
-                    cursor.execute("Delete from EMPLOYEE_ATTENDANCE where BADGE_NO = '%s' and ACTUAL_DATE = '%s' and SEQ_NO = %d" % (employee, currDate, 1))
-                else:
-                    return attendance_id
+                #if self.chOverwrite.isChecked():
+                # Record exists, delete record
+                cursor.execute("Delete from EMPLOYEE_ATTENDANCE where BADGE_NO = '%s' and ACTUAL_DATE = '%s' and SEQ_NO = %d" % (employee, currDate, 1))
 
                 # check if repeated already
                 if repeatCount > 1:
@@ -416,8 +415,8 @@ class NobleInterfaceForm(QDialog):
         cur = connOriTMS.cursor()
         # truncate the Noble Exception table
         cur.execute('Truncate table dbo.user_noble_exception')
-        sqlStr = "Select bc.NOBLEID, bc.EMPLOYEE_NO, eb.EMPLOYEE_NAME from BADGE_CONTROL bc, EMPLOYEE_BADGE eb where " \
-                 "bc.EMPLOYEE_NO = eb.EMPLOYEE_NO and EMPLOYEE_STATUS = 'A' and CATEGORY_CODE IN ('CAGT','CC') and WORK_GROUP_CODE >= '%s' and " \
+        sqlStr = "Select control_no, EMPLOYEE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where " \
+                 "EMPLOYEE_STATUS = 'A' and CATEGORY_CODE IN ('CAGT','CC') and WORK_GROUP_CODE >= '%s' and " \
                 "WORK_GROUP_CODE <= '%s' and EMPLOYEE_NAME >= '%s' and EMPLOYEE_NAME <= '%s'" % \
                 (self.workgroupComboFrom.currentText(), self.workgroupComboTo.currentText(),
                 self.employeeComboFrom.currentText(), self.employeeComboTo.currentText())
@@ -920,26 +919,26 @@ class NobleInterfaceForm(QDialog):
         runHistory = []
         for rec in cursor:
             line = []
-            if rec[1]:
+            if rec[1]:                                    # Run_Date
                 dt = rec[1].isoformat()
                 dt = dt.replace("T", " ")                 # replace 'T' in datetime with a space
                 line.append(dt)
             else:
                 line.append('')
-            line.append(rec[2])
-            line.append(rec[3])
-            line.append(rec[4])
-            line.append(rec[5])
-            if rec[6]:
-                line.append(rec[6].isoformat())
+            line.append(rec[2])                             # Workgroup_From
+            line.append(rec[3])                             # Workgroup_To
+            line.append(rec[4])                             # Employee_From
+            line.append(rec[5])                             # Employee_To
+            if rec[6]:                                      # Date_From
+                line.append(rec[6])
             else:
                 line.append('')
-            if rec[7] <> None:
-                line.append(rec[7].isoformat())
+            if rec[7] <> None:                              # Date_To
+                line.append(rec[7])
             else:
                 line.append('')
-            line.append(rec[8])
-            line.append(rec[9])
+            line.append(rec[8])                             # Number of employees
+            line.append(rec[9])                             # Inserted records
 
             runHistory.append(line)
             #runHistory.append([rec[0], rec[1].isoformat(), rec[2], rec[3], rec[4], rec[5], rec[6].isoformat(), rec[7].isoformat(), rec[8], rec[9]])

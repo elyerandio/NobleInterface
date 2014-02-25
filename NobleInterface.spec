@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 a = Analysis(['NobleInterface.py'],
-             pathex=['d:\\Clients\\Docomo\\Nobel Interface\\DocomoNobleInterface'],
+             pathex=['d:\\clients\\Docomo\\Nobel Interface\\DocomoNobleInterface'],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None)

@@ -10,3 +10,4 @@ NobleBrowswer/dist/*
 *~
 *.pyc
 .gitignore
+*.spec
