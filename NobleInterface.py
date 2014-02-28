@@ -415,7 +415,9 @@ class NobleInterfaceForm(QDialog):
         cur = connOriTMS.cursor()
         # truncate the Noble Exception table
         cur.execute('Truncate table dbo.user_noble_exception')
-        sqlStr = "Select control_no, EMPLOYEE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE where " \
+
+        # Get the employees to process based on the data entered in the selection screen
+        sqlStr = "Select CONTROL_NO, EMPLOYEE_NO, EMPLOYEE_NAME from EMPLOYEE_BADGE eb where " \
                  "EMPLOYEE_STATUS = 'A' and CATEGORY_CODE IN ('CAGT','CC') and WORK_GROUP_CODE >= '%s' and " \
                 "WORK_GROUP_CODE <= '%s' and EMPLOYEE_NAME >= '%s' and EMPLOYEE_NAME <= '%s'" % \
                 (self.workgroupComboFrom.currentText(), self.workgroupComboTo.currentText(),
