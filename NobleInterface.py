@@ -298,8 +298,8 @@ class NobleInterfaceForm(QDialog):
                 schedule = employees[call_date][badge].schedule
 
                 #skip absent employee i.e. no timein/timeout
-                #if strLoginTime == '00:00:00' and strLogoutTime == '00:00:00':
-                #    continue
+                if (strLoginTime == '00:00:00' or strLogoutTime == '00:00:00') and not schedule.startswith('R'):
+                    continue
                 #elif (strLoginTime == '00:00:00' or strLogoutTime == '00:00:00'): # and schedule.startswith('R'):
                 #    continue
 
@@ -541,6 +541,10 @@ class NobleInterfaceForm(QDialog):
                 call_date = "%d-%02d-%02d" % (rec[0].year, rec[0].month, rec[0].day)
                 tsr = rec[1]
 
+                # Testing
+                if tsr == 'M522':
+                    pass
+
                 #parse and convert login from int to datetime.time
                 loginStr = "%06d" % rec[2]                                          #convert login from int to 6-char string
                 (hour, min, sec) = (loginStr[:2], loginStr[2:4], loginStr[4:])      #extract hour, min, sec
@@ -732,6 +736,12 @@ class NobleInterfaceForm(QDialog):
                 strLoginTime = employees[call_date][emp].getTgenStr()
                 strLogoutTime = employees[call_date][emp].getLogoutTimeStr()
                 strLogoutTimePrev = employees[call_date][emp].getLogoutTimePrevStr()
+                sched = employees[call_date][emp].schedule
+
+                # check if cross-over shift
+                if not sched.startswith('R'):                           # not a rest day
+                    if int(sched[:2]) > int(sched[2:]):                 # in-hour > out-hour
+                        employees[call_date][emp].isCrossOver = True
 
                 #skip absent employee i.e. no timein/timeout
                 if strLoginTime == '00:00:00' and strLogoutTime == '00:00:00':
